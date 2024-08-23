@@ -1,0 +1,11 @@
+server:
+  port: 3479
+  address: 0.0.0.0
+
+lavalink:
+  plugins:
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.7.1"
+      snapshot: false
+  server:
+    sources:
+      youtube: false
