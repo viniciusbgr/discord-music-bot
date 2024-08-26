@@ -1,18 +1,32 @@
 import { readdir } from "node:fs/promises";
-import { Client, ClientOptions } from "discord.js";
-import { Manager } from "magmastream"
+import { Collection, ApplicationCommandDataResolvable, ApplicationCommandData, Client, ClientOptions } from "discord.js";
+import { Manager, ManagerEvents } from "magmastream"
 
-interface Event {
+export interface LavaLinkEvent {
     name: string;
 
-    run(): void | Promise<void>;
+    run(...args: any): void | Promise<void>;
+}
+
+export interface ClientEvent {
+    name: string;
+
+    run(...args: any): void | Promise<void>;
+}
+
+export interface Command {
+    data: Partial<ApplicationCommandDataResolvable>;
+
+    run(...args: any): void | Promise<void>;
 }
 
 export class Bot extends Client<true> {
     static #folderEventClient = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/events/external";
-    static #folderEventLavalink = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/events/internal";
+    static #folderEventLavaLink = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/events/lavalink";
+    static #folderCommands = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/commands";
     #token: string;
     manager: Manager;
+    commands: Collection<string, Command> = new Collection();
 
     constructor(options: ClientOptions) {
         super(options);
@@ -29,7 +43,8 @@ export class Bot extends Client<true> {
                 {
                     host: process.env.LAVA_LINK_HOST,
                     port: Number(process.env.LAVA_LINK_PORT),
-                    password: process.env.LAVA_LINK_PASSWORD
+                    password: process.env.LAVA_LINK_PASSWORD,
+                    identifier: "Lavalink main"
                 },
             ],
             send: (id, payload) => {
@@ -48,14 +63,50 @@ export class Bot extends Client<true> {
         for (const file of files) {
             const { default: property } = await import(Bot.#folderEventClient + "/" + file);
 
-            const event = new property(this) as Event;
-
-            console.log(event);
+            const event = new property(this) as ClientEvent;
 
             if (!event || !event.name) throw new Error("Event name not found.");
             if (!event.run || typeof event.run !== "function") throw new Error("Event run function not found.");
 
-            this.on(event.name, event.run.bind(event));
+            this.on(event.name, (...args: any) => {
+                event.run.bind(event)(...args);
+            });
+        }
+    }
+
+    async HandleLavaLinkEvents(): Promise<void> {
+        const files = await readdir(Bot.#folderEventLavaLink, { encoding: "utf-8", recursive: true });
+
+        if (!files.length) throw new Error("No lavaLink events found.");
+
+        for (const file of files) {
+            const { default: property } = await import(Bot.#folderEventLavaLink + "/" + file);
+
+            const event = new property(this) as LavaLinkEvent;
+
+            if (!event || !event.name) throw new Error("Event name not found.");
+            if (!event.run || typeof event.run !== "function") throw new Error("Event run function not found.");
+
+            this.manager.on(event.name as keyof ManagerEvents,(...args: any) => {
+                event.run.bind(event)(args);
+            });
+        }
+    }
+
+    async HandleCommands(): Promise<void> {
+        const files = await readdir(Bot.#folderCommands, { encoding: "utf-8", recursive: true });
+
+        if (!files.length) throw new Error("No commands found.");
+
+        for (const file of files) {
+            const { default: property } = await import(Bot.#folderCommands + "/" + file);
+
+            const command = new property(this) as Command;
+
+            if (!command || !command.data) throw new Error("Command data not found.");
+            if (!command.run || typeof command.run !== "function") throw new Error("Command run function not found.");
+
+            this.commands.set((command.data as ApplicationCommandData).name, command);
         }
     }
 
