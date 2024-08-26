@@ -7,5 +7,6 @@ lavalink:
     - dependency: "dev.lavalink.youtube:youtube-plugin:1.7.1"
       snapshot: false
   server:
+    password: "&ADO*wPmvqwBghE@slOsLmFbx87Pupuv2Aa-0mlQ4wNA-X4WK@nKcF3jmg3i*+yWd*j@JHpxYD3g3G5pEk2coqVe60XEiEQze%ce"
     sources:
       youtube: false

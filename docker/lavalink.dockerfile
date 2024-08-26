@@ -6,7 +6,7 @@ RUN apk add --no-cache wget libgcc \
     && mkdir /opt/lavalink \
     && wget https://github.com/lavalink-devs/Lavalink/releases/download/${lavalink_version}/Lavalink.jar -qO /opt/lavalink/Lavalink.jar
 
-COPY application.yml /opt/lavalink/application.yml
+COPY config/application.yml /opt/lavalink/application.yml
 
 WORKDIR /opt/lavalink
 

@@ -1,0 +1,9 @@
+node_modules/
+.env
+pnpm-lock.yaml
+.git
+.gitignore
+dist/
+docker/
+dist/
+docker-compose.yml
