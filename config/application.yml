@@ -1,12 +1,9 @@
-server:
-  port: 3479
-  address: 0.0.0.0
-
 lavalink:
   plugins:
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.7.1"
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.7.2"
       snapshot: false
   server:
-    password: "&ADO*wPmvqwBghE@slOsLmFbx87Pupuv2Aa-0mlQ4wNA-X4WK@nKcF3jmg3i*+yWd*j@JHpxYD3g3G5pEk2coqVe60XEiEQze%ce"
     sources:
       youtube: false
+      soundcloud: false
+

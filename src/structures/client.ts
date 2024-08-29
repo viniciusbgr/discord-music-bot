@@ -24,15 +24,11 @@ export class Bot extends Client<true> {
     static #folderEventClient = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/events/external";
     static #folderEventLavaLink = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/events/lavalink";
     static #folderCommands = process.cwd() + (process.env.RUN_MODE == "production" ? "/dist" : "/src" ) + "/commands";
-    #token: string;
     manager: Manager;
     commands: Collection<string, Command> = new Collection();
 
     constructor(options: ClientOptions) {
         super(options);
-
-        if (!process.env.DISCORD_TOKEN) throw new Error("DISCORD_TOKEN is not defined in the environment variables.");
-        this.#token = process.env.DISCORD_TOKEN;
 
         if (!process.env.LAVA_LINK_HOST) throw new Error("LAVA_LINK_HOST is not defined in the environment variables.");
         if (!process.env.LAVA_LINK_PORT) throw new Error("LAVA_LINK_PORT is not defined in the environment variables.");
@@ -111,6 +107,6 @@ export class Bot extends Client<true> {
     }
 
     async auth(): Promise<void> {
-        await this.login(this.#token);
+        await this.login();
     }
 }
