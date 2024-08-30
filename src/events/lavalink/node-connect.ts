@@ -7,6 +7,6 @@ export default class {
     constructor(private _: Bot) {};
 
     run(node: Node) : void {
-        console.log("Node connected");
+        console.log(`Node ${node.options?.identifier ?? "unknow"} connected`);
     }
 }

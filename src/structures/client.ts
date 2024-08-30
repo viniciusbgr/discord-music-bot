@@ -84,7 +84,7 @@ export class Bot extends Client<true> {
             if (!event.run || typeof event.run !== "function") throw new Error("Event run function not found.");
 
             this.manager.on(event.name as keyof ManagerEvents,(...args: any) => {
-                event.run.bind(event)(args);
+                event.run.bind(event)(...args);
             });
         }
     }
