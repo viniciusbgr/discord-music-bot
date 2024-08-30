@@ -46,15 +46,13 @@ export default class implements Command{
       return;
     }
 
-
-
     const enable = player.isAutoplay;
 
     player.setAutoplay(!enable, this.client.user);
 
     interaction.reply({
-      content: "Autoplay has been " + (enable ? "disabled" : "enabled"),
+      content: "Autoplay has been " + (!enable === false ? "disabled" : "enabled"),
       ephemeral: true
     });
   }
-}
+} 
