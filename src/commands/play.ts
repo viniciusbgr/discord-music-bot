@@ -1,6 +1,6 @@
-import { ApplicationCommandDataResolvable, ApplicationCommandOptionChoiceData, ApplicationCommandOptionType, ApplicationCommandType, AutocompleteInteraction, ChatInputCommandInteraction, resolveBase64 } from "discord.js";
+import { ApplicationCommandDataResolvable, ApplicationCommandOptionChoiceData, ApplicationCommandOptionType, ApplicationCommandType, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js";
 import { Bot, Command } from "../structures/client";
-import { SearchResult, Track } from "magmastream";
+import { SearchResult } from "magmastream";
 
 export default class implements Command {
     data: Partial<ApplicationCommandDataResolvable> = {
@@ -20,7 +20,7 @@ export default class implements Command {
     constructor(private client: Bot) { };
 
     async run(interaction: ChatInputCommandInteraction<"cached">) {
-        if (!this.client.manager.nodes.size) {
+        if (!this.client.manager.nodes.filter(node => node.connected).size) {
             interaction.reply({
                 ephemeral: true,
                 content: "No available nodes... please await ",
@@ -99,7 +99,7 @@ export default class implements Command {
             player.play();
         }
 
-        interaction.editReply({ content: `Added ${choice} to the queue` });
+        interaction.editReply({ content: `Added **${choice}** to the queue` });
     }
 
     async autocomplete(interaction: AutocompleteInteraction<"cached">) {
@@ -152,8 +152,6 @@ export default class implements Command {
                 console.error(`error on load request by ${interaction.user.username}`, result);
                 break;
         }
-
-        
 
         await interaction.respond(options);
     }

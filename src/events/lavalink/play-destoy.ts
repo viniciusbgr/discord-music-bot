@@ -1,11 +1,11 @@
 import { Player } from "magmastream";
 
 export default class {
-    name = "playerCreate";
+    name = "playerDestroy";
 
     constructor(private _: any) { }
 
     run(player: Player) {
-        console.log(`Player created on guild ${player.guild}`);
+        console.log(`Player destroy on guild ${player.guild}`);
     }
 }
