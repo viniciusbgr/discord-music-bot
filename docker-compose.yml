@@ -5,14 +5,18 @@ services:
       dockerfile: docker/lavalink.dockerfile
     container_name: lavalink
     network_mode: host
+    env_file:
+      - lavalink.env
 
   app:
     build:
       context: .
       dockerfile: docker/app.dockerfile
     env_file:
-      - .env
+      - bot.env
     container_name: bot
     network_mode: host
+    volumes:
+      - .:/mnt/app
     depends_on:
       - lavalink

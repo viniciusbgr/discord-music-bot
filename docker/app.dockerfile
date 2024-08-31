@@ -1,12 +1,12 @@
 FROM node:22.7.0-alpine3.19
 
-WORKDIR /home/app
+WORKDIR /home/app/src
 
-COPY . /home/app/
+COPY entrypoint.sh /home/app/entrypoint.sh
 
-RUN npm install pnpm -g \
-    && pnpm install \
-    && pnpm build \
-    && rm -r config/ src/ tsconfig.json
+VOLUME "/mnt/app"
 
-CMD ["pnpm", "start"]
+RUN chmod +x /home/app/entrypoint.sh \
+    && npm install -g pnpm
+
+ENTRYPOINT [ "/home/app/entrypoint.sh" ]
