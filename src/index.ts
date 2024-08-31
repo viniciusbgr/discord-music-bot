@@ -3,7 +3,8 @@ import { Bot } from "./structures/client";
 
 const client = new Bot({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates],
-    partials: [Partials.Channel, Partials.GuildMember, Partials.User]
+    partials: [Partials.Channel, Partials.GuildMember, Partials.User],
+    allowedMentions: { repliedUser: false },
 });
 
 client.HandleClientEvents().catch(console.error);

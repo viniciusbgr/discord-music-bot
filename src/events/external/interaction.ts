@@ -6,13 +6,42 @@ export default class implements ClientEvent {
 
     constructor(private client: Bot) {};
 
-    run(interaction: Interaction<"cached">) : void {
+    async run(interaction: Interaction<"cached">) {
         if (interaction.isChatInputCommand()) {
             const command = this.client.commands.get(interaction.commandName);
 
             if (!command) return;
 
-            command.run(interaction);
+            try {
+                await command.run(interaction);
+            } catch (err) {
+                
+                const message = `An error occurred while executing this command\nErr: ${err}`;
+                if (interaction.deferred) {
+                    await interaction.editReply({
+                        content: message,
+                    });
+                } else {
+                    await interaction.reply({
+                        content: message,
+                        ephemeral: true,
+                    });
+                }
+
+                console.error(err);
+            }
+        }
+
+        if (interaction.isAutocomplete()) {
+            const command = this.client.commands.get(interaction.commandName);
+
+            if (!command) return;
+
+            try {
+                await command.autocomplete?.(interaction);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 }

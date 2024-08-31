@@ -19,7 +19,8 @@ export default class implements Command {
             return;
         }
 
-        const player = this.client.manager.players.get(interaction.member.voice.channelId);
+        const player = this.client.manager.players.get(interaction.guildId);
+
 
         if (!player) {
             interaction.reply({
@@ -30,28 +31,21 @@ export default class implements Command {
             return;
         }
 
-        if (!player.playing || !player.paused) {
+        if (!player.playing || player.paused) {
             interaction.reply({
                 content: "The player is not playing",
                 ephemeral: true
             });
-        }
 
-        if (!player.queue.size) {
-            interaction.reply({
-                content: "The queue is empty",
-                ephemeral: true
-            });
-
-            return;
+            return
         }
 
         const enable = player.isAutoplay;
 
         player.setAutoplay(!enable, this.client.user);
 
-        interaction.reply({
-            content: "Autoplay has been " + (!enable === false ? "disabled" : "enabled"),
+        await interaction.reply({
+            content: "Autoplay has been **" + (enable ? "disabled" : "enabled") + "**",
             ephemeral: true
         });
     }

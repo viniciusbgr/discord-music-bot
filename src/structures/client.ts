@@ -17,6 +17,7 @@ export interface ClientEvent {
 export interface Command {
     data: Partial<ApplicationCommandDataResolvable>;
 
+    autocomplete?(...args: any): void | Promise<void>;
     run(...args: any): void | Promise<void>;
 }
 

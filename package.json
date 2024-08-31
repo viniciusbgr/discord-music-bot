@@ -2,17 +2,15 @@
   "name": "music-bot",
   "type": "commonjs",
   "dependencies": {
-    "@discordjs/voice": "^0.17.0",
     "discord.js": "^14.15.3",
     "magmastream": "^2.5.13"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "pnpm install && pnpm build && node dist/index.js"
   }
 }
