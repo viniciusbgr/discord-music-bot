@@ -9,7 +9,7 @@ This source was made with intention replacement bot third parties, being more st
 ## Quick run
 
 <div style="border-left: 2px solid yellow; padding-left: 10px">
-    You needed <strong><a href="https://docs.docker.com/compose/">docker</a></strong> and <strong><a href="https://docs.docker.com/compose/">docker compose</a></strong> installed in you environment.
+    You need <strong><a href="https://docs.docker.com/compose/">docker</a></strong> and <strong><a href="https://docs.docker.com/compose/">docker compose</a></strong> installed in you environment.
 </div>
 
 #### Create environments files:
